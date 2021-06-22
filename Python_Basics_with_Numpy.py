@@ -55,29 +55,12 @@ sigmoid_derivative_test(sigmoid_derivative)
 # GRADED FUNCTION:image2vector
 
 def image2vector(image):
-    """
-    Argument:
-    image -- a numpy array of shape (length, height, depth)
-    
-    Returns:
-    v -- a vector of shape (length*height*depth, 1)
-    """
-    
-    # (≈ 1 line of code)
-    # v =
-    # YOUR CODE STARTS HERE
+
     image.shape
     v = image.reshape(image.shape[0] * image.shape[1] * image.shape[2],1)
     
-    # YOUR CODE ENDS HERE
-    
     return v
 
-
-# In[17]:
-
-
-# This is a 3 by 3 by 2 array, typically images will be (num_px_x, num_px_y,3) where 3 represents the RGB values
 t_image = np.array([[[ 0.67826139,  0.29380381],
                      [ 0.90714982,  0.52835647],
                      [ 0.4215251 ,  0.45017551]],
@@ -94,74 +77,13 @@ print ("image2vector(image) = " + str(image2vector(t_image)))
 
 image2vector_test(image2vector)
 
-
-# <a name='1-4'></a>
-# ### 1.4 - Normalizing rows
-# 
-# Another common technique we use in Machine Learning and Deep Learning is to normalize our data. It often leads to a better performance because gradient descent converges faster after normalization. Here, by normalization we mean changing x to $ \frac{x}{\| x\|} $ (dividing each row vector of x by its norm).
-# 
-# For example, if 
-# $$x = \begin{bmatrix}
-#         0 & 3 & 4 \\
-#         2 & 6 & 4 \\
-# \end{bmatrix}\tag{3}$$ 
-# then 
-# $$\| x\| = \text{np.linalg.norm(x, axis=1, keepdims=True)} = \begin{bmatrix}
-#     5 \\
-#     \sqrt{56} \\
-# \end{bmatrix}\tag{4} $$
-# and
-# $$ x\_normalized = \frac{x}{\| x\|} = \begin{bmatrix}
-#     0 & \frac{3}{5} & \frac{4}{5} \\
-#     \frac{2}{\sqrt{56}} & \frac{6}{\sqrt{56}} & \frac{4}{\sqrt{56}} \\
-# \end{bmatrix}\tag{5}$$ 
-# 
-# Note that you can divide matrices of different sizes and it works fine: this is called broadcasting and you're going to learn about it in part 5.
-# 
-# With `keepdims=True` the result will broadcast correctly against the original x.
-# 
-# `axis=1` means you are going to get the norm in a row-wise manner. If you need the norm in a column-wise way, you would need to set `axis=0`. 
-# 
-# numpy.linalg.norm has another parameter `ord` where we specify the type of normalization to be done (in the exercise below you'll do 2-norm). To get familiar with the types of normalization you can visit [numpy.linalg.norm](https://numpy.org/doc/stable/reference/generated/numpy.linalg.norm.html)
-# 
-# <a name='ex-6'></a>
-# ### Exercise 6 - normalize_rows
-# Implement normalizeRows() to normalize the rows of a matrix. After applying this function to an input matrix x, each row of x should be a vector of unit length (meaning length 1).
-# 
-# **Note**: Don't try to use `x /= x_norm`. For the matrix division numpy must broadcast the x_norm, which is not supported by the operant `/=`
-
-# In[18]:
-
-
 # GRADED FUNCTION: normalize_rows
 
 def normalize_rows(x):
-    """
-    Implement a function that normalizes each row of the matrix x (to have unit length).
-    
-    Argument:
-    x -- A numpy matrix of shape (n, m)
-    
-    Returns:
-    x -- The normalized (by row) numpy matrix. You are allowed to modify x.
-    """
-    
-    #(≈ 2 lines of code)
-    # Compute x_norm as the norm 2 of x. Use np.linalg.norm(..., ord = 2, axis = ..., keepdims = True)
-    # x_norm =
-    # Divide x by its norm.
-    # x =
-    # YOUR CODE STARTS HERE
     x_norm = np.linalg.norm(x, axis=1, keepdims=True)
     x = x/x_norm
-    
-    # YOUR CODE ENDS HERE
 
     return x
-
-
-# In[19]:
-
 
 x = np.array([[0, 3, 4],
               [1, 6, 4]])
@@ -169,93 +91,13 @@ print("normalizeRows(x) = " + str(normalize_rows(x)))
 
 normalizeRows_test(normalize_rows)
 
-
-# **Note**:
-# In normalize_rows(), you can try to print the shapes of x_norm and x, and then rerun the assessment. You'll find out that they have different shapes. This is normal given that x_norm takes the norm of each row of x. So x_norm has the same number of rows but only 1 column. So how did it work when you divided x by x_norm? This is called broadcasting and we'll talk about it now! 
-
-# <a name='ex-7'></a>
-# ### Exercise 7 - softmax
-# Implement a softmax function using numpy. You can think of softmax as a normalizing function used when your algorithm needs to classify two or more classes. You will learn more about softmax in the second course of this specialization.
-# 
-# **Instructions**:
-# - $\text{for } x \in \mathbb{R}^{1\times n} \text{,     }$
-# 
-# \begin{align*}
-#  softmax(x) &= softmax\left(\begin{bmatrix}
-#     x_1  &&
-#     x_2 &&
-#     ...  &&
-#     x_n  
-# \end{bmatrix}\right) \\&= \begin{bmatrix}
-#     \frac{e^{x_1}}{\sum_{j}e^{x_j}}  &&
-#     \frac{e^{x_2}}{\sum_{j}e^{x_j}}  &&
-#     ...  &&
-#     \frac{e^{x_n}}{\sum_{j}e^{x_j}} 
-# \end{bmatrix} 
-# \end{align*}
-# 
-# - $\text{for a matrix } x \in \mathbb{R}^{m \times n} \text{,  $x_{ij}$ maps to the element in the $i^{th}$ row and $j^{th}$ column of $x$, thus we have: }$  
-# 
-# \begin{align*}
-# softmax(x) &= softmax\begin{bmatrix}
-#             x_{11} & x_{12} & x_{13} & \dots  & x_{1n} \\
-#             x_{21} & x_{22} & x_{23} & \dots  & x_{2n} \\
-#             \vdots & \vdots & \vdots & \ddots & \vdots \\
-#             x_{m1} & x_{m2} & x_{m3} & \dots  & x_{mn}
-#             \end{bmatrix} \\ \\&= 
-#  \begin{bmatrix}
-#     \frac{e^{x_{11}}}{\sum_{j}e^{x_{1j}}} & \frac{e^{x_{12}}}{\sum_{j}e^{x_{1j}}} & \frac{e^{x_{13}}}{\sum_{j}e^{x_{1j}}} & \dots  & \frac{e^{x_{1n}}}{\sum_{j}e^{x_{1j}}} \\
-#     \frac{e^{x_{21}}}{\sum_{j}e^{x_{2j}}} & \frac{e^{x_{22}}}{\sum_{j}e^{x_{2j}}} & \frac{e^{x_{23}}}{\sum_{j}e^{x_{2j}}} & \dots  & \frac{e^{x_{2n}}}{\sum_{j}e^{x_{2j}}} \\
-#     \vdots & \vdots & \vdots & \ddots & \vdots \\
-#     \frac{e^{x_{m1}}}{\sum_{j}e^{x_{mj}}} & \frac{e^{x_{m2}}}{\sum_{j}e^{x_{mj}}} & \frac{e^{x_{m3}}}{\sum_{j}e^{x_{mj}}} & \dots  & \frac{e^{x_{mn}}}{\sum_{j}e^{x_{mj}}}
-# \end{bmatrix} \\ \\ &= \begin{pmatrix}
-#     softmax\text{(first row of x)}  \\
-#     softmax\text{(second row of x)} \\
-#     \vdots  \\
-#     softmax\text{(last row of x)} \\
-# \end{pmatrix} 
-# \end{align*}
-
-# **Notes:**
-# Note that later in the course, you'll see "m" used to represent the "number of training examples", and each training example is in its own column of the matrix. Also, each feature will be in its own row (each row has data for the same feature).  
-# Softmax should be performed for all features of each training example, so softmax would be performed on the columns (once we switch to that representation later in this course).
-# 
-# However, in this coding practice, we're just focusing on getting familiar with Python, so we're using the common math notation $m \times n$  
-# where $m$ is the number of rows and $n$ is the number of columns.
-
-# In[22]:
-
-
 # GRADED FUNCTION: softmax
 
 def softmax(x):
-    """Calculates the softmax for each row of the input x.
 
-    Your code should work for a row vector and also for matrices of shape (m,n).
-
-    Argument:
-    x -- A numpy matrix of shape (m,n)
-
-    Returns:
-    s -- A numpy matrix equal to the softmax of x, of shape (m,n)
-    """
-    
-    #(≈ 3 lines of code)
-    # Apply exp() element-wise to x. Use np.exp(...).
-    # x_exp = ...
-
-    # Create a vector x_sum that sums each row of x_exp. Use np.sum(..., axis = 1, keepdims = True).
-    # x_sum = ...
-    
-    # Compute softmax(x) by dividing x_exp by x_sum. It should automatically use numpy broadcasting.
-    # s = ...
-    
-    # YOUR CODE STARTS HERE
     x_exp = np.exp(x)
     x_sum = np.sum(x_exp, axis=1,keepdims=True)
     s = x_exp/x_sum
-    
-    # YOUR CODE ENDS HERE
     
     return s
 

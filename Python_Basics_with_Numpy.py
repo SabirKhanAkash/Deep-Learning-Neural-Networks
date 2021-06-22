@@ -110,26 +110,10 @@ softmax_test(softmax)
 # GRADED FUNCTION: L1
 
 def L1(yhat, y):
-    """
-    Arguments:
-    yhat -- vector of size m (predicted labels)
-    y -- vector of size m (true labels)
-    
-    Returns:
-    loss -- the value of the L1 loss function defined above
-    """
-    
-    #(≈ 1 line of code)
-    # loss = 
-    # YOUR CODE STARTS HERE
+
     loss = np.sum(abs(y-yhat))
     
-    # YOUR CODE ENDS HERE
-    
     return loss
-
-
-# In[32]:
 
 
 yhat = np.array([.9, 0.2, 0.1, .4, .9])
@@ -139,39 +123,13 @@ print("L1 = " + str(L1(yhat, y)))
 L1_test(L1)
 
 
-# <a name='ex-9'></a>
-# ### Exercise 9 - L2
-# Implement the numpy vectorized version of the L2 loss. There are several way of implementing the L2 loss but you may find the function np.dot() useful. As a reminder, if $x = [x_1, x_2, ..., x_n]$, then `np.dot(x,x)` = $\sum_{j=0}^n x_j^{2}$. 
-# 
-# - L2 loss is defined as $$\begin{align*} & L_2(\hat{y},y) = \sum_{i=0}^{m-1}(y^{(i)} - \hat{y}^{(i)})^2 \end{align*}\tag{7}$$
-
-# In[33]:
-
-
 # GRADED FUNCTION: L2
 
 def L2(yhat, y):
-    """
-    Arguments:
-    yhat -- vector of size m (predicted labels)
-    y -- vector of size m (true labels)
-    
-    Returns:
-    loss -- the value of the L2 loss function defined above
-    """
-    
-    #(≈ 1 line of code)
-    # loss = ...
-    # YOUR CODE STARTS HERE
+
     loss = np.dot(y-yhat,y-yhat)
     
-    # YOUR CODE ENDS HERE
-    
     return loss
-
-
-# In[34]:
-
 
 yhat = np.array([.9, 0.2, 0.1, .4, .9])
 y = np.array([1, 0, 0, 1, 1])
@@ -179,13 +137,3 @@ y = np.array([1, 0, 0, 1, 1])
 print("L2 = " + str(L2(yhat, y)))
 
 L2_test(L2)
-
-
-# Congratulations on completing this assignment. We hope that this little warm-up exercise helps you in the future assignments, which will be more exciting and interesting!
-
-# <font color='blue'>
-# <b>What to remember:</b>
-#     
-# - Vectorization is very important in deep learning. It provides computational efficiency and clarity.
-# - You have reviewed the L1 and L2 loss.
-# - You are familiar with many numpy functions such as np.sum, np.dot, np.multiply, np.maximum, etc...

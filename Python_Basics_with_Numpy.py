@@ -52,30 +52,6 @@ print ("sigmoid_derivative(t_x) = " + str(sigmoid_derivative(t_x)))
 
 sigmoid_derivative_test(sigmoid_derivative)
 
-
-# <a name='1-3'></a>
-# ### 1.3 - Reshaping arrays ###
-# 
-# Two common numpy functions used in deep learning are [np.shape](https://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.shape.html) and [np.reshape()](https://docs.scipy.org/doc/numpy/reference/generated/numpy.reshape.html). 
-# - X.shape is used to get the shape (dimension) of a matrix/vector X. 
-# - X.reshape(...) is used to reshape X into some other dimension. 
-# 
-# For example, in computer science, an image is represented by a 3D array of shape $(length, height, depth = 3)$. However, when you read an image as the input of an algorithm you convert it to a vector of shape $(length*height*3, 1)$. In other words, you "unroll", or reshape, the 3D array into a 1D vector.
-# 
-# <img src="images/image2vector_kiank.png" style="width:500px;height:300;">
-# 
-# <a name='ex-5'></a>
-# ### Exercise 5 - image2vector
-# Implement `image2vector()` that takes an input of shape (length, height, 3) and returns a vector of shape (length\*height\*3, 1). For example, if you would like to reshape an array v of shape (a, b, c) into a vector of shape (a*b,c) you would do:
-# ``` python
-# v = v.reshape((v.shape[0] * v.shape[1], v.shape[2])) # v.shape[0] = a ; v.shape[1] = b ; v.shape[2] = c
-# ```
-# - Please don't hardcode the dimensions of image as a constant. Instead look up the quantities you need with `image.shape[0]`, etc. 
-# - You can use v = v.reshape(-1, 1). Just make sure you understand why it works.
-
-# In[16]:
-
-
 # GRADED FUNCTION:image2vector
 
 def image2vector(image):

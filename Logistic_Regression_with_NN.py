@@ -100,78 +100,16 @@ print ("b = " + str(b))
 
 initialize_with_zeros_test(initialize_with_zeros)
 
-
-# <a name='4-3'></a>
-# ### 4.3 - Forward and Backward propagation
-# 
-# Now that your parameters are initialized, you can do the "forward" and "backward" propagation steps for learning the parameters.
-# 
-# <a name='ex-5'></a>
-# ### Exercise 5 - propagate
-# Implement a function `propagate()` that computes the cost function and its gradient.
-# 
-# **Hints**:
-# 
-# Forward Propagation:
-# - You get X
-# - You compute $A = \sigma(w^T X + b) = (a^{(1)}, a^{(2)}, ..., a^{(m-1)}, a^{(m)})$
-# - You calculate the cost function: $J = -\frac{1}{m}\sum_{i=1}^{m}(y^{(i)}\log(a^{(i)})+(1-y^{(i)})\log(1-a^{(i)}))$
-# 
-# Here are the two formulas you will be using: 
-# 
-# $$ \frac{\partial J}{\partial w} = \frac{1}{m}X(A-Y)^T\tag{7}$$
-# $$ \frac{\partial J}{\partial b} = \frac{1}{m} \sum_{i=1}^m (a^{(i)}-y^{(i)})\tag{8}$$
-
-# In[57]:
-
-
 # GRADED FUNCTION: propagate
 
 def propagate(w, b, X, Y):
-    """
-    Implement the cost function and its gradient for the propagation explained above
-
-    Arguments:
-    w -- weights, a numpy array of size (num_px * num_px * 3, 1)
-    b -- bias, a scalar
-    X -- data of size (num_px * num_px * 3, number of examples)
-    Y -- true "label" vector (containing 0 if non-cat, 1 if cat) of size (1, number of examples)
-
-    Return:
-    cost -- negative log-likelihood cost for logistic regression
-    dw -- gradient of the loss with respect to w, thus same shape as w
-    db -- gradient of the loss with respect to b, thus same shape as b
-    
-    Tips:
-    - Write your code step by step for the propagation. np.log(), np.dot()
-    """
-    
     m = X.shape[1]
-
-    
-    # FORWARD PROPAGATION (FROM X TO COST)
-    #(≈ 2 lines of code)
-    # compute activation
-    # A = ...
-    # compute cost using np.dot. Don't use loops for the sum.
-    # cost = ...                                
-    # YOUR CODE STARTS HERE
     A = sigmoid(np.dot(w.T,X)+b)
     cost = -(np.sum(Y*np.log(A)+(1-Y)*np.log(1-A)))/m
-    
-    
-    
-    # YOUR CODE ENDS HERE
 
-    # BACKWARD PROPAGATION (TO FIND GRAD)
-    #(≈ 2 lines of code)
-    # dw = ...
-    # db = ...
-    # YOUR CODE STARTS HERE
     dw = (np.dot(X,(A-Y).T))/m
     db = (np.sum(A-Y))/m
     
-    # YOUR CODE ENDS HERE
     cost = np.squeeze(np.array(cost))
 
     
@@ -179,9 +117,6 @@ def propagate(w, b, X, Y):
              "db": db}
     
     return grads, cost
-
-
-# In[58]:
 
 
 w =  np.array([[1.], [2.]])
@@ -201,27 +136,8 @@ print ("cost = " + str(cost))
 
 propagate_test(propagate)
 
-
-# **Expected output**
-# 
-# ```
-# dw = [[0.99845601]
-#  [2.39507239]]
-# db = 0.001455578136784208
-# cost = 5.801545319394553
-# ```
-
-# <a name='4-4'></a>
-# ### 4.4 - Optimization
-# - You have initialized your parameters.
-# - You are also able to compute a cost function and its gradient.
-# - Now, you want to update the parameters using gradient descent.
-# 
-# <a name='ex-6'></a>
 # ### Exercise 6 - optimize
 # Write down the optimization function. The goal is to learn $w$ and $b$ by minimizing the cost function $J$. For a parameter $\theta$, the update rule is $ \theta = \theta - \alpha \text{ } d\theta$, where $\alpha$ is the learning rate.
-
-# In[61]:
 
 
 # GRADED FUNCTION: optimize

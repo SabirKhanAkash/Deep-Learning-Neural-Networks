@@ -39,51 +39,14 @@ print ("test_set_x shape: " + str(test_set_x_orig.shape))
 print ("test_set_y shape: " + str(test_set_y.shape))
 
 
-# **Expected Output for m_train, m_test and num_px**: 
-# <table style="width:15%">
-#   <tr>
-#     <td> m_train </td>
-#     <td> 209 </td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>m_test</td>
-#     <td> 50 </td> 
-#   </tr>
-#   
-#   <tr>
-#     <td>num_px</td>
-#     <td> 64 </td> 
-#   </tr>
-#   
-# </table>
-# 
-
-# For convenience, you should now reshape images of shape (num_px, num_px, 3) in a numpy-array of shape (num_px $*$ num_px $*$ 3, 1). After this, our training (and test) dataset is a numpy-array where each column represents a flattened image. There should be m_train (respectively m_test) columns.
-# 
-# <a name='ex-2'></a>
 # ### Exercise 2
 # Reshape the training and test data sets so that images of size (num_px, num_px, 3) are flattened into single vectors of shape (num\_px $*$ num\_px $*$ 3, 1).
-# 
-# A trick when you want to flatten a matrix X of shape (a,b,c,d) to a matrix X_flatten of shape (b$*$c$*$d, a) is to use: 
-# ```python
-# X_flatten = X.reshape(X.shape[0], -1).T      # X.T is the transpose of X
-# ```
-
-# In[6]:
-
 
 # Reshape the training and test examples
-#(≈ 2 lines of code)
-# train_set_x_flatten = ...
-# test_set_x_flatten = ...
-# YOUR CODE STARTS HERE
+
 train_set_x_flatten = train_set_x_orig.reshape(train_set_x_orig.shape[0], -1).T 
 test_set_x_flatten = test_set_x_orig.reshape(test_set_x_orig.shape[0], -1).T 
 
-# YOUR CODE ENDS HERE
-
-# Check that the first 10 pixels of the second image are in the correct place
 assert np.alltrue(train_set_x_flatten[0:10, 1] == [196, 192, 190, 193, 186, 182, 188, 179, 174, 213]), "Wrong solution. Use (X.shape[0], -1).T."
 assert np.alltrue(test_set_x_flatten[0:10, 1] == [115, 110, 111, 137, 129, 129, 155, 146, 145, 159]), "Wrong solution. Use (X.shape[0], -1).T."
 
@@ -91,38 +54,6 @@ print ("train_set_x_flatten shape: " + str(train_set_x_flatten.shape))
 print ("train_set_y shape: " + str(train_set_y.shape))
 print ("test_set_x_flatten shape: " + str(test_set_x_flatten.shape))
 print ("test_set_y shape: " + str(test_set_y.shape))
-
-
-# **Expected Output**: 
-# 
-# <table style="width:35%">
-#   <tr>
-#     <td>train_set_x_flatten shape</td>
-#     <td> (12288, 209)</td> 
-#   </tr>
-#   <tr>
-#     <td>train_set_y shape</td>
-#     <td>(1, 209)</td> 
-#   </tr>
-#   <tr>
-#     <td>test_set_x_flatten shape</td>
-#     <td>(12288, 50)</td> 
-#   </tr>
-#   <tr>
-#     <td>test_set_y shape</td>
-#     <td>(1, 50)</td> 
-#   </tr>
-# </table>
-
-# To represent color images, the red, green and blue channels (RGB) must be specified for each pixel, and so the pixel value is actually a vector of three numbers ranging from 0 to 255.
-# 
-# One common preprocessing step in machine learning is to center and standardize your dataset, meaning that you substract the mean of the whole numpy array from each example, and then divide each example by the standard deviation of the whole numpy array. But for picture datasets, it is simpler and more convenient and works almost as well to just divide every row of the dataset by 255 (the maximum value of a pixel channel).
-# 
-# <!-- During the training of your model, you're going to multiply weights and add biases to some initial inputs in order to observe neuron activations. Then you backpropogate with the gradients to train the model. But, it is extremely important for each feature to have a similar range such that our gradients don't explode. You will see that more in detail later in the lectures. !--> 
-# 
-# Let's standardize our dataset.
-
-# In[7]:
 
 
 train_set_x = train_set_x_flatten / 255.

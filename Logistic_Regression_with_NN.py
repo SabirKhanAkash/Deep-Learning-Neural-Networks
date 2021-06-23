@@ -247,68 +247,16 @@ print ("predictions = " + str(predict(w, b, X)))
 
 predict_test(predict)
 
-
-# <font color='blue'>
-#     
-# **What to remember:**
-#     
-# You've implemented several functions that:
-# - Initialize (w,b)
-# - Optimize the loss iteratively to learn parameters (w,b):
-#     - Computing the cost and its gradient 
-#     - Updating the parameters using gradient descent
-# - Use the learned (w,b) to predict the labels for a given set of examples
-
-# <a name='5'></a>
-# ## 5 - Merge all functions into a model ##
-# 
-# You will now see how the overall model is structured by putting together all the building blocks (functions implemented in the previous parts) together, in the right order.
-# 
-# <a name='ex-8'></a>
 # ### Exercise 8 - model
 # Implement the model function. Use the following notation:
 #     - Y_prediction_test for your predictions on the test set
 #     - Y_prediction_train for your predictions on the train set
 #     - parameters, grads, costs for the outputs of optimize()
 
-# In[71]:
-
 
 # GRADED FUNCTION: model
 
 def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0.5, print_cost=False):
-    """
-    Builds the logistic regression model by calling the function you've implemented previously
-    
-    Arguments:
-    X_train -- training set represented by a numpy array of shape (num_px * num_px * 3, m_train)
-    Y_train -- training labels represented by a numpy array (vector) of shape (1, m_train)
-    X_test -- test set represented by a numpy array of shape (num_px * num_px * 3, m_test)
-    Y_test -- test labels represented by a numpy array (vector) of shape (1, m_test)
-    num_iterations -- hyperparameter representing the number of iterations to optimize the parameters
-    learning_rate -- hyperparameter representing the learning rate used in the update rule of optimize()
-    print_cost -- Set to True to print the cost every 100 iterations
-    
-    Returns:
-    d -- dictionary containing information about the model.
-    """
-    # (≈ 1 line of code)   
-    # initialize parameters with zeros 
-    # w, b = ...
-    
-    #(≈ 1 line of code)
-    # Gradient descent 
-    # params, grads, costs = ...
-    
-    # Retrieve parameters w and b from dictionary "params"
-    # w = ...
-    # b = ...
-    
-    # Predict test/train set examples (≈ 2 lines of code)
-    # Y_prediction_test = ...
-    # Y_prediction_train = ...
-    
-    # YOUR CODE STARTS HERE
     w, b = initialize_with_zeros(X_train.shape[0])
     
     params, grads, costs = optimize(w, b, X_train, Y_train, num_iterations, learning_rate, print_cost)
@@ -318,10 +266,7 @@ def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0
     
     Y_prediction_test = predict(w, b, X_test)
     Y_prediction_train = predict(w, b, X_train)
-    
-    # YOUR CODE ENDS HERE
 
-    # Print train/test Errors
     if print_cost:
         print("train accuracy: {} %".format(100 - np.mean(np.abs(Y_prediction_train - Y_train)) * 100))
         print("test accuracy: {} %".format(100 - np.mean(np.abs(Y_prediction_test - Y_test)) * 100))
@@ -337,64 +282,23 @@ def model(X_train, Y_train, X_test, Y_test, num_iterations=2000, learning_rate=0
     
     return d
 
-
-# In[72]:
-
-
 model_test(model)
-
-
-# If you pass all the tests, run the following cell to train your model.
-
-# In[73]:
 
 
 logistic_regression_model = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations=2000, learning_rate=0.005, print_cost=True)
 
 
-# **Comment**: Training accuracy is close to 100%. This is a good sanity check: your model is working and has high enough capacity to fit the training data. Test accuracy is 70%. It is actually not bad for this simple model, given the small dataset we used and that logistic regression is a linear classifier. But no worries, you'll build an even better classifier next week!
-# 
-# Also, you see that the model is clearly overfitting the training data. Later in this specialization you will learn how to reduce overfitting, for example by using regularization. Using the code below (and changing the `index` variable) you can look at predictions on pictures of the test set.
-
-# In[74]:
-
-
-# Example of a picture that was wrongly classified.
 index = 1
 plt.imshow(test_set_x[:, index].reshape((num_px, num_px, 3)))
 print ("y = " + str(test_set_y[0,index]) + ", you predicted that it is a \"" + classes[int(logistic_regression_model['Y_prediction_test'][0,index])].decode("utf-8") +  "\" picture.")
 
 
-# Let's also plot the cost function and the gradients.
-
-# In[76]:
-
-
-# Plot learning curve (with costs)
 costs = np.squeeze(logistic_regression_model['costs'])
 plt.plot(costs)
 plt.ylabel('cost')
 plt.xlabel('iterations (per hundreds)')
 plt.title("Learning rate =" + str(logistic_regression_model["learning_rate"]))
 plt.show()
-
-
-# **Interpretation**:
-# You can see the cost decreasing. It shows that the parameters are being learned. However, you see that you could train the model even more on the training set. Try to increase the number of iterations in the cell above and rerun the cells. You might see that the training set accuracy goes up, but the test set accuracy goes down. This is called overfitting. 
-
-# <a name='6'></a>
-# ## 6 - Further analysis (optional/ungraded exercise) ##
-# 
-# Congratulations on building your first image classification model. Let's analyze it further, and examine possible choices for the learning rate $\alpha$. 
-
-# #### Choice of learning rate ####
-# 
-# **Reminder**:
-# In order for Gradient Descent to work you must choose the learning rate wisely. The learning rate $\alpha$  determines how rapidly we update the parameters. If the learning rate is too large we may "overshoot" the optimal value. Similarly, if it is too small we will need too many iterations to converge to the best values. That's why it is crucial to use a well-tuned learning rate.
-# 
-# Let's compare the learning curve of our model with several choices of learning rates. Run the cell below. This should take about 1 minute. Feel free also to try different values than the three we have initialized the `learning_rates` variable to contain, and see what happens. 
-
-# In[77]:
 
 
 learning_rates = [0.01, 0.001, 0.0001]
@@ -417,31 +321,8 @@ frame.set_facecolor('0.90')
 plt.show()
 
 
-# **Interpretation**: 
-# - Different learning rates give different costs and thus different predictions results.
-# - If the learning rate is too large (0.01), the cost may oscillate up and down. It may even diverge (though in this example, using 0.01 still eventually ends up at a good value for the cost). 
-# - A lower cost doesn't mean a better model. You have to check if there is possibly overfitting. It happens when the training accuracy is a lot higher than the test accuracy.
-# - In deep learning, we usually recommend that you: 
-#     - Choose the learning rate that better minimizes the cost function.
-#     - If your model overfits, use other techniques to reduce overfitting. (We'll talk about this in later videos.) 
-# 
+my_image = "myimage.png"   
 
-# <a name='7'></a>
-# ## 7 - Test with your own image (optional/ungraded exercise) ##
-# 
-# Congratulations on finishing this assignment. You can use your own image and see the output of your model. To do that:
-#     1. Click on "File" in the upper bar of this notebook, then click "Open" to go on your Coursera Hub.
-#     2. Add your image to this Jupyter Notebook's directory, in the "images" folder
-#     3. Change your image's name in the following code
-#     4. Run the code and check if the algorithm is right (1 = cat, 0 = non-cat)!
-
-# In[34]:
-
-
-# change this to the name of your image file
-my_image = "my_image.jpg"   
-
-# We preprocess the image to fit your algorithm.
 fname = "images/" + my_image
 image = np.array(Image.open(fname).resize((num_px, num_px)))
 plt.imshow(image)
@@ -451,19 +332,3 @@ my_predicted_image = predict(logistic_regression_model["w"], logistic_regression
 
 print("y = " + str(np.squeeze(my_predicted_image)) + ", your algorithm predicts a \"" + classes[int(np.squeeze(my_predicted_image)),].decode("utf-8") +  "\" picture.")
 
-
-# <font color='blue'>
-#     
-# **What to remember from this assignment:**
-# 1. Preprocessing the dataset is important.
-# 2. You implemented each function separately: initialize(), propagate(), optimize(). Then you built a model().
-# 3. Tuning the learning rate (which is an example of a "hyperparameter") can make a big difference to the algorithm. You will see more examples of this later in this course!
-
-# Finally, if you'd like, we invite you to try different things on this Notebook. Make sure you submit before trying anything. Once you submit, things you can play with include:
-#     - Play with the learning rate and the number of iterations
-#     - Try different initialization methods and compare the results
-#     - Test other preprocessings (center the data, or divide each row by its standard deviation)
-
-# Bibliography:
-# - http://www.wildml.com/2015/09/implementing-a-neural-network-from-scratch/
-# - https://stats.stackexchange.com/questions/211436/why-do-we-normalize-images-by-subtracting-the-datasets-image-mean-and-not-the-c

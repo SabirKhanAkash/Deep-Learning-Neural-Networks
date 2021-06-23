@@ -60,142 +60,36 @@ train_set_x = train_set_x_flatten / 255.
 test_set_x = test_set_x_flatten / 255.
 
 
-# <font color='blue'>
-#     
-#     
-# **What you need to remember:**
-# 
-# Common steps for pre-processing a new dataset are:
-# - Figure out the dimensions and shapes of the problem (m_train, m_test, num_px, ...)
-# - Reshape the datasets such that each example is now a vector of size (num_px \* num_px \* 3, 1)
-# - "Standardize" the data
-
-# <a name='3'></a>
-# ## 3 - General Architecture of the learning algorithm ##
-# 
-# It's time to design a simple algorithm to distinguish cat images from non-cat images.
-# 
-# You will build a Logistic Regression, using a Neural Network mindset. The following Figure explains why **Logistic Regression is actually a very simple Neural Network!**
-# 
-# <img src="images/LogReg_kiank.png" style="width:650px;height:400px;">
-# 
-# **Mathematical expression of the algorithm**:
-# 
-# For one example $x^{(i)}$:
-# $$z^{(i)} = w^T x^{(i)} + b \tag{1}$$
-# $$\hat{y}^{(i)} = a^{(i)} = sigmoid(z^{(i)})\tag{2}$$ 
-# $$ \mathcal{L}(a^{(i)}, y^{(i)}) =  - y^{(i)}  \log(a^{(i)}) - (1-y^{(i)} )  \log(1-a^{(i)})\tag{3}$$
-# 
-# The cost is then computed by summing over all training examples:
-# $$ J = \frac{1}{m} \sum_{i=1}^m \mathcal{L}(a^{(i)}, y^{(i)})\tag{6}$$
-# 
-# **Key steps**:
-# In this exercise, you will carry out the following steps: 
-#     - Initialize the parameters of the model
-#     - Learn the parameters for the model by minimizing the cost  
-#     - Use the learned parameters to make predictions (on the test set)
-#     - Analyse the results and conclude
-
-# <a name='4'></a>
-# ## 4 - Building the parts of our algorithm ## 
-# 
-# The main steps for building a Neural Network are:
-# 1. Define the model structure (such as number of input features) 
-# 2. Initialize the model's parameters
-# 3. Loop:
-#     - Calculate current loss (forward propagation)
-#     - Calculate current gradient (backward propagation)
-#     - Update parameters (gradient descent)
-# 
-# You often build 1-3 separately and integrate them into one function we call `model()`.
-# 
-# <a name='4-1'></a>
-# ### 4.1 - Helper functions
-# 
-# <a name='ex-3'></a>
 # ### Exercise 3 - sigmoid
-# Using your code from "Python Basics", implement `sigmoid()`. As you've seen in the figure above, you need to compute $sigmoid(z) = \frac{1}{1 + e^{-z}}$ for $z = w^T x + b$ to make predictions. Use np.exp().
-
-# In[48]:
-
 
 # GRADED FUNCTION: sigmoid
 
 def sigmoid(z):
-    """
-    Compute the sigmoid of z
-
-    Arguments:
-    z -- A scalar or numpy array of any size.
-
-    Return:
-    s -- sigmoid(z)
-    """
-
-    #(≈ 1 line of code)
-    # s = ...
-    # YOUR CODE STARTS HERE
     s = 1/(1+np.exp(-z))
     
-    # YOUR CODE ENDS HERE
-    
     return s
-
-
-# In[49]:
-
 
 print ("sigmoid([0, 2]) = " + str(sigmoid(np.array([0,2]))))
 
 sigmoid_test(sigmoid)
 
-
-# In[50]:
-
-
 x = np.array([0.5, 0, 2.0])
 output = sigmoid(x)
 print(output)
 
-
-# <a name='4-2'></a>
-# ### 4.2 - Initializing parameters
-# 
-# <a name='ex-4'></a>
 # ### Exercise 4 - initialize_with_zeros
 # Implement parameter initialization in the cell below. You have to initialize w as a vector of zeros. If you don't know what numpy function to use, look up np.zeros() in the Numpy library's documentation.
-
-# In[67]:
 
 
 # GRADED FUNCTION: initialize_with_zeros
 
 def initialize_with_zeros(dim):
-    """
-    This function creates a vector of zeros of shape (dim, 1) for w and initializes b to 0.
-    
-    Argument:
-    dim -- size of the w vector we want (or number of parameters in this case)
-    
-    Returns:
-    w -- initialized vector of shape (dim, 1)
-    b -- initialized scalar (corresponds to the bias) of type float
-    """
-    
-    # (≈ 2 lines of code)
-    # w = ...
-    # b = ...
-    # YOUR CODE STARTS HERE
     w = np.zeros((dim,1))
     b = 0.0
     
     # YOUR CODE ENDS HERE
 
     return w, b
-
-
-# In[68]:
-
 
 dim = 2
 w, b = initialize_with_zeros(dim)
